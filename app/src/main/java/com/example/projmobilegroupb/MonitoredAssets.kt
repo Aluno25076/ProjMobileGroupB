@@ -18,6 +18,7 @@ class MonitoredAssets: Fragment(){
 
         val button = view.findViewById<Button>(R.id.image_toolbar)
 
+        /*
         button.setOnClickListener {
             val nextFrag = FragmentTwo()
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
@@ -25,6 +26,7 @@ class MonitoredAssets: Fragment(){
             transaction.addToBackStack(null)
             transaction.commit()
         }
+         */
 
         return view
     }
