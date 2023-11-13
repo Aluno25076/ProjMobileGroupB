@@ -55,7 +55,7 @@ class MonitoredAssets: Fragment(){
 
             override fun onResponse(call: Call<Symbol>, response: Response<Symbol>){
                 if (response.isSuccessful){
-                    //Atualizar o TextView com o titulo TODO
+                    //Atualizar o TextView com o simbolo da ação
                     textView.text = response.body()?.symbol ?: "Asset not found"
                 } else {
                     textView.text = "Error: ${response.code()}"
