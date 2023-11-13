@@ -24,7 +24,7 @@ class MonitoredAssets: Fragment(){
     ): View? {
         val view = inflater.inflate(R.layout.monitored_assets_layout, container, false)
 
-        val button = view.findViewById<Button>(R.id.image_toolbar)
+        //val button = view.findViewById<Button>(R.id.image_toolbar)
 
         textView = view.findViewById(R.id.textView1)
 
