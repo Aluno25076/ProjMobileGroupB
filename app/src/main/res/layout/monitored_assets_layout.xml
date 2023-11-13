@@ -30,4 +30,16 @@
             app:tint="#FFFFFF" />
 
     </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <include layout="@layout/asset_summary_layout"/>
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
 </LinearLayout>
