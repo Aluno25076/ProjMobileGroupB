@@ -17,7 +17,7 @@
             android:id="@+id/text_toolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ir para as notícias"
+            android:text="Go to News"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
@@ -31,15 +31,55 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:gravity="center_horizontal"
+                android:padding="12sp"
+                android:text="Symbol"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:padding="12sp"
+                android:text="Current Price"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="3"
+                android:padding="12sp"
+                android:text="Change Percent"
+                android:textColor="@color/black" />
+        </TableRow>
+    </TableLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
+            android:id="@+id/assetContainer"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
+        </LinearLayout>
 
-            <include layout="@layout/asset_summary_layout"/>
-        </androidx.cardview.widget.CardView>
     </ScrollView>
 </LinearLayout>
