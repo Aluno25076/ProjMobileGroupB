@@ -51,7 +51,7 @@ class MonitoredAssets: Fragment(){
     private fun loadSummary(){
         val jsonApi = AssetClient.retrofit.create(JsonSummaryApi::class.java)
 
-        jsonApi.getSummary(1).enqueue(object: Callback<Symbol> {
+        jsonApi.getSummary(2).enqueue(object: Callback<Symbol> {
 
             override fun onResponse(call: Call<Symbol>, response: Response<Symbol>){
                 if (response.isSuccessful){
