@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,17 +22,15 @@ class MonitoredAssets: Fragment(){
     ): View? {
         val view = inflater.inflate(R.layout.monitored_assets_layout, container, false)
 
-        //val button = view.findViewById<Button>(R.id.image_toolbar)
+        val button = view.findViewById<ImageView>(R.id.image_toolbar)
 
-        /*
         button.setOnClickListener {
-            val nextFrag = FragmentTwo()
+            val nextFrag = AssetsList()
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragmentHolder, nextFrag)
             transaction.addToBackStack(null)
             transaction.commit()
         }
-         */
 
         return view
     }
