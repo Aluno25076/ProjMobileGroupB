@@ -15,7 +15,9 @@ import retrofit2.Response
 
 class MonitoredAssets: Fragment(){
 
-    private lateinit var textView: TextView
+    private lateinit var textView1: TextView
+    private lateinit var textView2: TextView
+    private lateinit var textView3: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,7 +28,9 @@ class MonitoredAssets: Fragment(){
 
         //val button = view.findViewById<Button>(R.id.image_toolbar)
 
-        textView = view.findViewById(R.id.textView1)
+        textView1 = view.findViewById(R.id.textView1)
+        textView2 = view.findViewById(R.id.textView2)
+        textView3 = view.findViewById(R.id.textView3)
 
         /*
         button.setOnClickListener {
@@ -56,15 +60,21 @@ class MonitoredAssets: Fragment(){
             override fun onResponse(call: Call<Symbol>, response: Response<Symbol>){
                 if (response.isSuccessful){
                     //Atualizar o TextView com o simbolo da ação
-                    textView.text = response.body()?.symbol ?: "Asset not found"
+                    textView1.text = response.body()?.symbol ?: "Asset not found"
+                    textView2.text = response.body()?.current_price ?: "Asset not found"
+                    textView3.text = response.body()?.change_percent ?: "Asset not found"
                 } else {
-                    textView.text = "Error: ${response.code()}"
+                    textView1.text = "Error: ${response.code()}"
+                    textView2.text = "Error: ${response.code()}"
+                    textView3.text = "Error: ${response.code()}"
                 }
             }
 
             override fun onFailure(call: Call<Symbol>, t: Throwable){
                 //exebir a mensagem de erro
-                textView.text = "Fail: ${t.message}"
+                textView1.text = "Fail: ${t.message}"
+                textView2.text = "Fail: ${t.message}"
+                textView3.text = "Fail: ${t.message}"
             }
         })
 

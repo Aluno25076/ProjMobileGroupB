@@ -6,6 +6,6 @@ import retrofit2.http.Path
 
 interface JsonSummaryApi {
 
-    @GET("/api/symbol/summary/{symbol}")
-    fun getSummary(@Path("symbol") summaryId: String): Call<Symbol>
+    @GET("api/symbol/summary/{symbol}")
+    fun getSummary(@Path("symbol") summary: String): Call<Symbol>
 }
