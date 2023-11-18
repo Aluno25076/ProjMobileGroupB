@@ -31,6 +31,18 @@ class MonitoredAssets: Fragment(){
             transaction.addToBackStack(null)
             transaction.commit()
         }
+        /*Button News - Next Fragment - Inicio*/
+
+        val buttonNews = view.findViewById<TextView>(R.id.text_toolbar)
+
+        buttonNews.setOnClickListener {
+            val nextFrag = NewsAssets()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragmentHolder,nextFrag)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+        /*Button News - Next Fragment - Fim*/
 
         return view
     }
