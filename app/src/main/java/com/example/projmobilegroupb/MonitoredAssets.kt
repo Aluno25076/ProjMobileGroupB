@@ -1,5 +1,6 @@
 package com.example.projmobilegroupb
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MonitoredAssets: Fragment(){
+
+    private val sharedPreferencesKey = "selectedSymbols"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +50,35 @@ class MonitoredAssets: Fragment(){
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        val sharedPreferences = activity?.getPreferences(Context.MODE_PRIVATE)
+        val savedSymbols = sharedPreferences?.getStringSet(sharedPreferencesKey, setOf())?.toList()
+
+        val symbols = savedSymbols ?: listOf("FB", "AAPL", "GOOGL")
+
+        val assetContainer = view.findViewById<LinearLayout>(R.id.assetContainer)
+
+        symbols.forEach { symbol ->
+            val assetSummaryView = layoutInflater.inflate(R.layout.asset_summary_layout, null)
+
+            val textView1 = assetSummaryView.findViewById<TextView>(R.id.textView1)
+            val textView2 = assetSummaryView.findViewById<TextView>(R.id.textView2)
+            val textView3 = assetSummaryView.findViewById<TextView>(R.id.textView3)
+
+            textView1.text = symbol
+            textView2.text = "Loading..."
+            textView3.text = "Loading..."
+
+            assetContainer.addView(assetSummaryView)
+
+            loadSummary(symbol, textView2, textView3)
+        }
+    }
+
+
+    /*
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -71,6 +102,7 @@ class MonitoredAssets: Fragment(){
             loadSummary(symbol, textView2, textView3)
         }
     }
+     */
 
     private fun loadSummary(symbol: String, textView2: TextView, textView3: TextView) {
         val jsonApi = AssetClient.retrofit.create(JsonSummaryApi::class.java)
