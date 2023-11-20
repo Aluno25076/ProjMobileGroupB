@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,6 +41,7 @@ class NewsAssets: Fragment() {
         return view
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -51,7 +55,7 @@ class NewsAssets: Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val newsList: List<NewsItem> = response.body() ?: emptyList()
-                    displayNews(newsList)
+                    displayNews2(newsList)
                 } else {
                     //TRatar erros na resposta
                 }
@@ -63,21 +67,49 @@ class NewsAssets: Fragment() {
         })
     }
 
-    private fun displayNews(newsList: List<NewsItem>) {
-        val news = view?.findViewById<TextView>(R.id.newsContainer)
 
-        if (news != null) {
-            val newsText = StringBuilder()
+    private fun displayNews2(newsList: List<NewsItem>) {
+        for ((index, newsItem) in newsList.withIndex()) {
+            val cardViewId =
+                resources.getIdentifier("cardView${index + 1}", "id", requireContext().packageName)
+            val cardView = view?.findViewById<CardView>(cardViewId)
 
-            newsList.forEach { newsItem ->
-                newsText.append("Title: ${newsItem.title}\n")
-                newsText.append("Description: ${newsItem.description}\n")
-                newsText.append("Date: ${newsItem.date}\n")
-                newsText.append("Image: ${newsItem.imageurl}\n")
+            cardView?.let {
+                val titleTextView = it.findViewById<TextView>(
+                    resources.getIdentifier(
+                        "textViewTitle${index + 1}",
+                        "id",
+                        requireContext().packageName
+                    )
+                )
+                val descriptionTextView = it.findViewById<TextView>(
+                    resources.getIdentifier(
+                        "textViewDescription${index + 1}",
+                        "id",
+                        requireContext().packageName
+                    )
+                )
+                val dateTextView = it.findViewById<TextView>(
+                    resources.getIdentifier(
+                        "textViewDate${index + 1}",
+                        "id",
+                        requireContext().packageName
+                    )
+                )
+                val imageView = it.findViewById<ImageView>(
+                    resources.getIdentifier(
+                        "imageView${index + 1}",
+                        "id",
+                        requireContext().packageName
+                    )
+                )
 
+                titleTextView.text = "Title: ${newsItem.title}\n"
+                descriptionTextView.text = "Description: ${newsItem.description}\n"
+                dateTextView.text = "Date: ${newsItem.date}\n"
+
+                Glide.with(requireContext()).load(newsItem.image_url).into(imageView)
             }
-            news.text = newsText.toString()
         }
-
     }
 }
