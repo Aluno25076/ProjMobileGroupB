@@ -1,11 +1,16 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+
 }
 
 android {
     namespace = "com.example.projmobilegroupb"
     compileSdk = 34
+
+    buildFeatures {
+        viewBinding=true
+    }
 
     defaultConfig {
         applicationId = "com.example.projmobilegroupb"
@@ -25,6 +30,8 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -36,6 +43,18 @@ android {
 }
 
 dependencies {
+
+
+
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.3.5")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.3.5")
+    implementation ("androidx.navigation:navigation-dynamic-features-fragment:2.3.5")
+
+    implementation ("androidx.appcompat:appcompat:1.3.1")
+    implementation ("com.google.android.material:material:1.4.3")
+    implementation ("androidx.constraintlayout:constraintlayout:2.1.0")
+
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -55,3 +74,4 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
+
