@@ -1,19 +1,24 @@
 package com.example.projmobilegroupb
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+public const val PREFS_KEY = "monitored_assets"
+
 class AssetsList: Fragment(){
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,7 +45,6 @@ class AssetsList: Fragment(){
         val listContainer = view.findViewById<LinearLayout>(R.id.listContainer2)
 
         loadList(listContainer)
-
     }
 
     private fun loadList(assetContainer: LinearLayout) {
@@ -65,6 +69,7 @@ class AssetsList: Fragment(){
         })
     }
 
+    /*
     private fun addSymbolToUI(symbol: String, assetContainer: LinearLayout) {
         val assetListView = layoutInflater.inflate(R.layout.symbols_list_layout, null)
 
@@ -73,5 +78,28 @@ class AssetsList: Fragment(){
 
         assetContainer.addView(assetListView)
     }
+    */
+    private fun addSymbolToUI(symbol: String, assetContainer: LinearLayout) {
+        val assetListView = layoutInflater.inflate(R.layout.symbols_list_layout, null)
 
+        val textViewSymbol = assetListView.findViewById<TextView>(R.id.textViewSymbol)
+        textViewSymbol.text = symbol
+
+        textViewSymbol.setOnClickListener {
+            saveMonitoredAsset(symbol)
+
+            Toast.makeText(requireContext(), "Symbol $symbol added to monitored assets", Toast.LENGTH_SHORT).show()
+        }
+
+        assetContainer.addView(assetListView)
+    }
+
+    private fun saveMonitoredAsset(symbol: String) {
+        val sharedPreferences = requireContext().getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val monitoredAssets = sharedPreferences.getStringSet("monitored_assets", mutableSetOf()) ?: mutableSetOf()
+        monitoredAssets.add(symbol)
+        editor.putStringSet("monitored_assets", monitoredAssets)
+        editor.apply()
+    }
 }
