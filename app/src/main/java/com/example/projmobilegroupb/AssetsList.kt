@@ -1,6 +1,7 @@
 package com.example.projmobilegroupb
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,17 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AssetsList: Fragment(){
-    companion object {
-        const val PREFS_NAME = "MyPrefs"
-    }
+public const val PREFS_KEY = "monitored_assets"
 
-    private val sharedPreferencesName = "selectedSymbols"
+class AssetsList: Fragment(){
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,12 +42,9 @@ class AssetsList: Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPreferences = requireActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-
         val listContainer = view.findViewById<LinearLayout>(R.id.listContainer2)
 
         loadList(listContainer)
-
     }
 
     private fun loadList(assetContainer: LinearLayout) {
@@ -88,30 +85,21 @@ class AssetsList: Fragment(){
         val textViewSymbol = assetListView.findViewById<TextView>(R.id.textViewSymbol)
         textViewSymbol.text = symbol
 
-        val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        val selectedSymbolsSet = sharedPreferences.getStringSet(PREFS_NAME, mutableSetOf()) ?: mutableSetOf()
-
-        if (selectedSymbolsSet.contains(symbol)) {
-            textViewSymbol.setTextColor(Color.GRAY)
-        }
-
-        /*
         textViewSymbol.setOnClickListener {
-            selectedSymbolsSet.add(symbol)
-            sharedPreferences.edit().putStringSet("selectedSymbols", selectedSymbolsSet).apply()
+            saveMonitoredAsset(symbol)
 
-            textViewSymbol.setTextColor(Color.GRAY)
-        }
-        */
-
-        textViewSymbol.setOnClickListener {
-            val selectedSymbolsSet = sharedPreferences.getStringSet(PREFS_NAME, mutableSetOf()) ?: mutableSetOf()
-            selectedSymbolsSet.add(symbol)
-            sharedPreferences.edit().putStringSet(PREFS_NAME, selectedSymbolsSet).apply()
-            textViewSymbol.setTextColor(Color.GRAY)
+            Toast.makeText(requireContext(), "Symbol $symbol added to monitored assets", Toast.LENGTH_SHORT).show()
         }
 
         assetContainer.addView(assetListView)
     }
 
+    private fun saveMonitoredAsset(symbol: String) {
+        val sharedPreferences = requireContext().getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val monitoredAssets = sharedPreferences.getStringSet("monitored_assets", mutableSetOf()) ?: mutableSetOf()
+        monitoredAssets.add(symbol)
+        editor.putStringSet("monitored_assets", monitoredAssets)
+        editor.apply()
+    }
 }
