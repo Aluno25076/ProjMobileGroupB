@@ -52,8 +52,6 @@ class MonitoredAssets: Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //val symbols = listOf("FB", "AAPL", "GOOGL")
-
         val symbols = MonitoredList.assets ?: emptyList()
 
         val assetContainer = view.findViewById<LinearLayout>(R.id.assetContainer)
@@ -83,18 +81,29 @@ class MonitoredAssets: Fragment(){
 
             override fun onResponse(call: Call<Symbol>, response: Response<Symbol>) {
                 if (response.isSuccessful) {
-                    // Update the TextViews with the fetched data
+                    val changePercent = response.body()?.change_percent?.toDoubleOrNull() ?: 0.0
+
                     textView2.text = response.body()?.current_price ?: "N/A"
                     textView3.text = response.body()?.change_percent ?: "N/A"
+
+                    // Alterar a cor do texto com base no percentual de alteração
+                    if (changePercent > 0) {
+                        // Se o percentual de alteração for positivo, defina a cor verde
+                        textView3.setTextColor(resources.getColor(R.color.green))
+                    } else if (changePercent < 0) {
+                        // Se o percentual de alteração for negativo, defina a cor vermelha
+                        textView3.setTextColor(resources.getColor(R.color.red))
+                    } else {
+                        // Se o percentual de alteração for zero, defina a cor padrão
+                        textView3.setTextColor(resources.getColor(android.R.color.black))
+                    }
                 } else {
-                    // Handle unsuccessful response
                     textView2.text = "Error: ${response.code()}"
                     textView3.text = "Error"
                 }
             }
 
             override fun onFailure(call: Call<Symbol>, t: Throwable) {
-                // Handle failure
                 textView2.text = "Fail: ${t.message}"
                 textView3.text = "Fail"
             }
