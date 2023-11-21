@@ -1,11 +1,10 @@
 package com.example.projmobilegroupb
 
-import android.content.Context
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -14,9 +13,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MonitoredAssets: Fragment(){
 
-    //private val sharedPreferencesKey = "selectedSymbols"
+class MonitoredAssets: Fragment(){
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,57 +48,33 @@ class MonitoredAssets: Fragment(){
         return view
     }
 
-    /*
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val symbols = listOf("FB", "AAPL", "GOOGL")
+        //val symbols = listOf("FB", "AAPL", "GOOGL")
+
+        val symbols = MonitoredList.assets ?: emptyList()
 
         val assetContainer = view.findViewById<LinearLayout>(R.id.assetContainer)
 
-        symbols.forEach { symbol ->
+
+        symbols.forEach { asset ->
             val assetSummaryView = layoutInflater.inflate(R.layout.asset_summary_layout, null)
 
             val textView1 = assetSummaryView.findViewById<TextView>(R.id.textView1)
             val textView2 = assetSummaryView.findViewById<TextView>(R.id.textView2)
             val textView3 = assetSummaryView.findViewById<TextView>(R.id.textView3)
 
-            textView1.text = symbol
+            textView1.text = asset.asset
             textView2.text = "Loading..."
             textView3.text = "Loading..."
 
             assetContainer.addView(assetSummaryView)
 
-            loadSummary(symbol, textView2, textView3)
+            loadSummary(asset.asset, textView2, textView3)
         }
     }
-     */
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        
-        val sharedPreferences = requireContext().getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
-        val savedSymbols = sharedPreferences.getStringSet("monitored_assets", mutableSetOf()) ?: mutableSetOf()
-
-        val assetContainer = view.findViewById<LinearLayout>(R.id.assetContainer)
-
-        savedSymbols.forEach { symbol ->
-            val assetSummaryView = layoutInflater.inflate(R.layout.asset_summary_layout, null)
-
-            val textView1 = assetSummaryView.findViewById<TextView>(R.id.textView1)
-            val textView2 = assetSummaryView.findViewById<TextView>(R.id.textView2)
-            val textView3 = assetSummaryView.findViewById<TextView>(R.id.textView3)
-
-            textView1.text = symbol
-            textView2.text = "Loading..."
-            textView3.text = "Loading..."
-
-            assetContainer.addView(assetSummaryView)
-
-            loadSummary(symbol, textView2, textView3)
-        }
-    }
-
 
     private fun loadSummary(symbol: String, textView2: TextView, textView3: TextView) {
         val jsonApi = AssetClient.retrofit.create(JsonSummaryApi::class.java)

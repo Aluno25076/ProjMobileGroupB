@@ -1,8 +1,6 @@
 package com.example.projmobilegroupb
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +12,6 @@ import androidx.fragment.app.Fragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-public const val PREFS_KEY = "monitored_assets"
 
 class AssetsList: Fragment(){
 
@@ -44,17 +40,18 @@ class AssetsList: Fragment(){
 
         val listContainer = view.findViewById<LinearLayout>(R.id.listContainer2)
 
-        loadList(listContainer)
+        // Passe o contexto (requireContext()) para loadList
+        loadList(listContainer, requireContext())
     }
 
-    private fun loadList(assetContainer: LinearLayout) {
+    private fun loadList(assetContainer: LinearLayout, context: Context) {
         val jsonListApi = AssetClient.retrofit.create(JsonListApi::class.java)
 
         jsonListApi.getList().enqueue(object : Callback<List<String>> {
             override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
                 if (response.isSuccessful) {
                     response.body()?.forEach { symbol ->
-                        addSymbolToUI(symbol, assetContainer)
+                        addSymbolToUI(symbol, assetContainer, context)
                     }
                 } else {
                     // Handle unsuccessful response
@@ -79,27 +76,20 @@ class AssetsList: Fragment(){
         assetContainer.addView(assetListView)
     }
     */
-    private fun addSymbolToUI(symbol: String, assetContainer: LinearLayout) {
+    private fun addSymbolToUI(symbol: String, assetContainer: LinearLayout, context: Context) {
         val assetListView = layoutInflater.inflate(R.layout.symbols_list_layout, null)
 
         val textViewSymbol = assetListView.findViewById<TextView>(R.id.textViewSymbol)
         textViewSymbol.text = symbol
 
         textViewSymbol.setOnClickListener {
-            saveMonitoredAsset(symbol)
+            // Adicionando stocks
+            MonitoredList.addAsset(Asset("$symbol"), context)
 
-            Toast.makeText(requireContext(), "Symbol $symbol added to monitored assets", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Symbol $symbol added to monitored assets", Toast.LENGTH_SHORT).show()
         }
 
         assetContainer.addView(assetListView)
     }
 
-    private fun saveMonitoredAsset(symbol: String) {
-        val sharedPreferences = requireContext().getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        val monitoredAssets = sharedPreferences.getStringSet("monitored_assets", mutableSetOf()) ?: mutableSetOf()
-        monitoredAssets.add(symbol)
-        editor.putStringSet("monitored_assets", monitoredAssets)
-        editor.apply()
-    }
 }

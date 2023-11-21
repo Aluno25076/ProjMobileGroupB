@@ -8,6 +8,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        MonitoredList.loadAssets(applicationContext)
+
         var frag = MonitoredAssets()
 
         supportFragmentManager.beginTransaction().add(R.id.fragmentHolder, frag).commit()
