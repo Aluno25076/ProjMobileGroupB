@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -67,15 +68,6 @@ class AssetsList: Fragment(){
     }
 
     /*
-    private fun addSymbolToUI(symbol: String, assetContainer: LinearLayout) {
-        val assetListView = layoutInflater.inflate(R.layout.symbols_list_layout, null)
-
-        val textViewSymbol = assetListView.findViewById<TextView>(R.id.textViewSymbol)
-        textViewSymbol.text = symbol
-
-        assetContainer.addView(assetListView)
-    }
-    */
     private fun addSymbolToUI(symbol: String, assetContainer: LinearLayout, context: Context) {
         val assetListView = layoutInflater.inflate(R.layout.symbols_list_layout, null)
 
@@ -91,5 +83,29 @@ class AssetsList: Fragment(){
 
         assetContainer.addView(assetListView)
     }
+    */
 
+    private fun addSymbolToUI(symbol: String, assetContainer: LinearLayout, context: Context) {
+        val assetListView = layoutInflater.inflate(R.layout.symbols_list_layout, null)
+
+        val switchSymbol = assetListView.findViewById<Switch>(R.id.switchSymbol)
+        switchSymbol.text = symbol
+
+        // Verifica se o símbolo já está na lista e atualiza o estado do Switch
+        switchSymbol.isChecked = MonitoredList.containsAsset(Asset("$symbol"), context)
+
+        switchSymbol.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // Adicionando símbolo
+                MonitoredList.addAsset(Asset("$symbol"), context)
+                Toast.makeText(context, "Symbol $symbol added to monitored assets", Toast.LENGTH_SHORT).show()
+            } else {
+                // Removendo símbolo
+                MonitoredList.removeAsset(Asset("$symbol"), context)
+                Toast.makeText(context, "Symbol $symbol removed from monitored assets", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        assetContainer.addView(assetListView)
+    }
 }

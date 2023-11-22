@@ -39,4 +39,9 @@ object MonitoredList {
         editor.putString(KEY_ASSETS, json)
         editor.apply()
     }
+
+    // Verifica se um ativo específico está na lista
+    fun containsAsset(asset: Asset, context: Context): Boolean {
+        return assets.contains(asset)
+    }
 }
