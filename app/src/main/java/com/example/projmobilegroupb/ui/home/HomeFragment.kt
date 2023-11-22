@@ -1,13 +1,27 @@
 package com.example.projmobilegroupb.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.projmobilegroupb.AssetsList
+import com.example.projmobilegroupb.NewsAssets
+import com.example.projmobilegroupb.PREFS_KEY
+import com.example.projmobilegroupb.R
 import com.example.projmobilegroupb.databinding.FragmentHomeBinding
+import com.example.projmobilegroupb.retrofit.AssetClient
+import com.example.projmobilegroupb.retrofit.JsonSummaryApi
+import com.example.projmobilegroupb.retrofit.Symbol
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeFragment : Fragment() {
 
@@ -24,19 +38,100 @@ class HomeFragment : Fragment() {
     ): View {
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        val button = view.findViewById<LinearLayout>(R.id.assetContainer)
+
+        button.setOnClickListener {
+            val nextFrag = AssetsList()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragmentHolder, nextFrag)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+
+        //Button News - Next Fragment - Inicio
+
+/*
+        val buttonNews = view.findViewById<TextView>(R.id.nav_view)
+
+        buttonNews.setOnClickListener {
+            val nextFrag = NewsAssets()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.assetContainer,nextFrag)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+
+*/
+
+
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
+        val textView: LinearLayout = binding.assetContainer
         homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+           // textView.text = it
         }
         return root
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val sharedPreferences = requireContext().getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
+        val savedSymbols = sharedPreferences.getStringSet("monitored_assets", mutableSetOf()) ?: mutableSetOf()
+
+        val assetContainer = view.findViewById<LinearLayout>(R.id.assetContainer)
+
+        savedSymbols.forEach { symbol ->
+            val assetSummaryView = layoutInflater.inflate(R.layout.asset_summary_layout, null)
+
+            val textView1 = assetSummaryView.findViewById<TextView>(R.id.textView1)
+            val textView2 = assetSummaryView.findViewById<TextView>(R.id.textView2)
+            val textView3 = assetSummaryView.findViewById<TextView>(R.id.textView3)
+
+            textView1.text = symbol
+            textView2.text = "Loading..."
+            textView3.text = "Loading..."
+
+            assetContainer.addView(assetSummaryView)
+
+            loadSummary(symbol, textView2, textView3)
+        }
+    }
+    private fun loadSummary(symbol: String, textView2: TextView, textView3: TextView) {
+        val jsonApi = AssetClient.retrofit.create(JsonSummaryApi::class.java)
+
+        jsonApi.getSummary(symbol).enqueue(object : Callback<Symbol> {
+
+            override fun onResponse(call: Call<Symbol>, response: Response<Symbol>) {
+                if (response.isSuccessful) {
+                    // Update the TextViews with the fetched data
+                    textView2.text = response.body()?.current_price ?: "N/A"
+                    textView3.text = response.body()?.change_percent ?: "N/A"
+                } else {
+                    // Handle unsuccessful response
+                    textView2.text = "Error: ${response.code()}"
+                    textView3.text = "Error"
+                }
+            }
+
+            override fun onFailure(call: Call<Symbol>, t: Throwable) {
+                // Handle failure
+                textView2.text = "Fail: ${t.message}"
+                textView3.text = "Fail"
+            }
+        })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+
+
+
 }

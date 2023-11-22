@@ -5,17 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.example.projmobilegroupb.retrofit.AssetClient
+import com.example.projmobilegroupb.retrofit.JsonNewsApi
+import com.example.projmobilegroupb.retrofit.NewsItem
+import com.example.projmobilegroupb.ui.home.HomeFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class NewsAssets: Fragment() {
 
@@ -28,15 +28,7 @@ class NewsAssets: Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.news_assets_layout, container, false)
 
-        val buttonBack = view.findViewById<TextView>(R.id.backMonitoredAssets)
 
-        buttonBack.setOnClickListener {
-            val nextFrag = MonitoredAssets()
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragmentHolder, nextFrag)
-            transaction.addToBackStack(null)
-            transaction.commit()
-        }
 
         return view
     }

@@ -1,4 +1,4 @@
-package com.example.projmobilegroupb
+package com.example.projmobilegroupb.retrofit
 
 data class Symbol(val symbol: String,
                 val logo_url: String,

@@ -1,4 +1,4 @@
-package com.example.projmobilegroupb
+package com.example.projmobilegroupb.retrofit
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

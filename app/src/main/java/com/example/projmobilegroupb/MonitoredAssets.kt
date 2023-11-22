@@ -1,15 +1,17 @@
-package com.example.projmobilegroupb
+/*package com.example.projmobilegroupb
 
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.projmobilegroupb.retrofit.AssetClient
+import com.example.projmobilegroupb.retrofit.JsonSummaryApi
+import com.example.projmobilegroupb.retrofit.Symbol
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +26,6 @@ class MonitoredAssets: Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.monitored_assets_layout, container, false)
-
         val button = view.findViewById<ImageView>(R.id.image_toolbar)
 
         button.setOnClickListener {
@@ -126,4 +127,9 @@ class MonitoredAssets: Fragment(){
             }
         })
     }
+
 }
+*/
+
+
+

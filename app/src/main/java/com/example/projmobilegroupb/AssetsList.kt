@@ -1,8 +1,6 @@
 package com.example.projmobilegroupb
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +9,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.projmobilegroupb.retrofit.AssetClient
+import com.example.projmobilegroupb.retrofit.JsonListApi
+import com.example.projmobilegroupb.ui.home.HomeFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,7 +30,7 @@ class AssetsList: Fragment(){
         val button = view.findViewById<TextView>(R.id.text_toolbar2)
 
         button.setOnClickListener {
-            val nextFrag = MonitoredAssets()
+            val nextFrag = HomeFragment()
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragmentHolder, nextFrag)
             transaction.addToBackStack(null)
