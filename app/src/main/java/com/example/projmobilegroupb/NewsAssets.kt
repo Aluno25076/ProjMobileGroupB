@@ -22,53 +22,63 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class NewsAssets: Fragment() {
 
+//Declaração da classe NewsAssets que herda de Fragment
+class NewsAssets: Fragment() {
+    //Inicializa variáveis mais tarde, usando lateinit
     private lateinit var jsonNewsApi: JsonNewsApi
     private lateinit var recyclerViewNews: RecyclerView
     private lateinit var emptyCardView: CardView
     private lateinit var backButton: Button
     private lateinit var emptyTextView: TextView
 
+    //Método chamado ao criar ou inflar a interface do fragmento
+    //Faz a conexão com news_assets_layout e retorna a view.
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //Inflar o layout do fragmento
         val view = inflater.inflate(R.layout.news_assets_layout, container, false)
 
+        //Inicializa as variáveis com base nos IDs dos elementos do layout
         recyclerViewNews = view.findViewById(R.id.recyclerViewNews)
         recyclerViewNews.layoutManager = LinearLayoutManager(context)
         emptyCardView = view.findViewById(R.id.withoutNews)
         backButton = view.findViewById(R.id.backMonitoredAssets)
         emptyTextView = view.findViewById(R.id.textViewWithoutNews)
 
-
+        //Evento onClick, botão back, para regressar ao MonitoredAssets, página inicial
         backButton.setOnClickListener {
+            //Cria instância do fragmento MonitoredAssets
             val nextFrag = MonitoredAssets()
+            //Substituição do fragmento atual pelo novo
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragmentHolder, nextFrag)
             transaction.addToBackStack(null)
             transaction.commit()
         }
-
+    //Retorna a view do fragmento
         return view
     }
 
+    //Quando a view é criada
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+    //Inicialização da interface usando Retrofit
         val jsonNewsApi = AssetClient.retrofit.create(JsonNewsApi::class.java)
         val call = jsonNewsApi.getNewsItem()
-
+    //Faz a chamada para obter os itens de notícias
         call.enqueue(object : Callback<List<NewsItem>> {
             override fun onResponse(
                 call: Call<List<NewsItem>>,
                 response: Response<List<NewsItem>>
             ) {
                 if (response.isSuccessful) {
+                    // Se a resposta for bem-sucedida, obtem a lista de itens de notícias
                     val newsList: List<NewsItem> = response.body() ?: emptyList()
-
+                    // Chama o método para exibir as notícias
                     displayNews(newsList)
 
                 } else {
@@ -85,8 +95,9 @@ class NewsAssets: Fragment() {
 
 
     }
-
+    // Método privado para exibir as notícias
     private fun displayNews(newsList: List<NewsItem>) {
+        // Criar um adaptador para o RecyclerView com a lista de notícias
         val adapterNews = NewsAdapter(requireContext(), newsList)
         recyclerViewNews.adapter = adapterNews
 
@@ -105,51 +116,5 @@ class NewsAssets: Fragment() {
 }
 
 
-/*
-        private fun displayNews2(newsList: List<NewsItem>) {
-            for ((index, newsItem) in newsList.withIndex()) {
-                val cardViewId =
-                    resources.getIdentifier("cardView${index + 1}", "id", requireContext().packageName)
-                val cardView = view?.findViewById<CardView>(cardViewId)
-    
-                cardView?.let {
-                    val titleTextView = it.findViewById<TextView>(
-                        resources.getIdentifier(
-                            "textViewTitle${index + 1}",
-                            "id",
-                            requireContext().packageName
-                        )
-                    )
-                    val descriptionTextView = it.findViewById<TextView>(
-                        resources.getIdentifier(
-                            "textViewDescription${index + 1}",
-                            "id",
-                            requireContext().packageName
-                        )
-                    )
-                    val dateTextView = it.findViewById<TextView>(
-                        resources.getIdentifier(
-                            "textViewDate${index + 1}",
-                            "id",
-                            requireContext().packageName
-                        )
-                    )
-                    val imageView = it.findViewById<ImageView>(
-                        resources.getIdentifier(
-                            "imageView${index + 1}",
-                            "id",
-                            requireContext().packageName
-                        )
-                    )
-    
-                    titleTextView.text = "Title: ${newsItem.title}\n"
-                    descriptionTextView.text = "Description: ${newsItem.description}\n"
-                    dateTextView.text = "Date: ${newsItem.date}\n"
-    
-                    Glide.with(requireContext()).load(newsItem.image_url).into(imageView)
-                }
-            }
-        }
-    
-*/
+
 
