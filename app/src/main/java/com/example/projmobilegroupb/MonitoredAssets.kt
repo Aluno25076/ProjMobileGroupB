@@ -36,6 +36,7 @@ class MonitoredAssets: Fragment(){
 
         val buttonNews = view.findViewById<TextView>(R.id.text_toolbar)
 
+        ////
         buttonNews.setOnClickListener {
             val nextFrag = NewsAssets()
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
