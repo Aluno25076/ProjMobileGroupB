@@ -10,6 +10,10 @@ import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.projmobilegroupb.dataClasses.Asset
+import com.example.projmobilegroupb.retrofit.AssetClient
+import com.example.projmobilegroupb.retrofit.JsonListApi
+import com.example.projmobilegroupb.retrofit.MonitoredList
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,10 +25,13 @@ class AssetsList: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // seleciona a view
         val view = inflater.inflate(R.layout.assets_list_layout, container, false)
 
+        // botão para voltar á pagina da monitorização das ações
         val button = view.findViewById<TextView>(R.id.text_toolbar2)
 
+        // a funcionalidade desse botão
         button.setOnClickListener {
             val nextFrag = MonitoredAssets()
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
@@ -33,19 +40,23 @@ class AssetsList: Fragment(){
             transaction.commit()
         }
 
+        // mostra a view
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val listContainer = view.findViewById<LinearLayout>(R.id.listContainer2)
+        // seleciona o conteiner
+        val listContainer = view.findViewById<LinearLayout>(R.id.listContainer)
 
         // Passe o contexto (requireContext()) para loadList
         loadList(listContainer, requireContext())
     }
 
+    // carrega a lista de ações
     private fun loadList(assetContainer: LinearLayout, context: Context) {
+        // faz a busca dos dados á API
         val jsonListApi = AssetClient.retrofit.create(JsonListApi::class.java)
 
         jsonListApi.getList().enqueue(object : Callback<List<String>> {
@@ -55,57 +66,42 @@ class AssetsList: Fragment(){
                         addSymbolToUI(symbol, assetContainer, context)
                     }
                 } else {
-                    // Handle unsuccessful response
-                    // ...
+                    // faz com que a app aguente com o erro
                 }
             }
 
             override fun onFailure(call: Call<List<String>>, t: Throwable) {
-                // Handle failure
-                // ...
+                // faz com que a app aguente com o erro
             }
         })
     }
 
-    /*
+    // adiciona as ações e os seus interruptores á lista
     private fun addSymbolToUI(symbol: String, assetContainer: LinearLayout, context: Context) {
         val assetListView = layoutInflater.inflate(R.layout.symbols_list_layout, null)
 
-        val textViewSymbol = assetListView.findViewById<TextView>(R.id.textViewSymbol)
-        textViewSymbol.text = symbol
-
-        textViewSymbol.setOnClickListener {
-            // Adicionando stocks
-            MonitoredList.addAsset(Asset("$symbol"), context)
-
-            Toast.makeText(context, "Symbol $symbol added to monitored assets", Toast.LENGTH_SHORT).show()
-        }
-
-        assetContainer.addView(assetListView)
-    }
-    */
-
-    private fun addSymbolToUI(symbol: String, assetContainer: LinearLayout, context: Context) {
-        val assetListView = layoutInflater.inflate(R.layout.symbols_list_layout, null)
-
+        // seleciona o interruptor
         val switchSymbol = assetListView.findViewById<Switch>(R.id.switchSymbol)
+        // dá o nome do interruptor
         switchSymbol.text = symbol
 
-        // Verifica se o símbolo já está na lista e atualiza o estado do Switch
+        // Verifica se a ação já está a ser monitorizada e atualiza o estado do interruptor
         switchSymbol.isChecked = MonitoredList.containsAsset(Asset("$symbol"), context)
 
+        // adiciona ou remove a ação dependendo da mudança de estado do interruptor (on/off)
         switchSymbol.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                // Adicionando símbolo
+                // Adicionando a ação
                 MonitoredList.addAsset(Asset("$symbol"), context)
                 Toast.makeText(context, "Symbol $symbol added to monitored assets", Toast.LENGTH_SHORT).show()
             } else {
-                // Removendo símbolo
+                // Removendo a ação
                 MonitoredList.removeAsset(Asset("$symbol"), context)
                 Toast.makeText(context, "Symbol $symbol removed from monitored assets", Toast.LENGTH_SHORT).show()
             }
         }
 
+        // adiciona o conteiner á view
         assetContainer.addView(assetListView)
     }
 }

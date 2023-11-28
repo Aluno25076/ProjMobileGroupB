@@ -1,4 +1,4 @@
-package com.example.projmobilegroupb
+package com.example.projmobilegroupb.dataClasses
 
 data class Symbol(val symbol: String,
                 val logo_url: String,

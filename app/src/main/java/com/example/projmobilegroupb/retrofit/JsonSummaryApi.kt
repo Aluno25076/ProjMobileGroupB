@@ -1,5 +1,6 @@
-package com.example.projmobilegroupb
+package com.example.projmobilegroupb.retrofit
 
+import com.example.projmobilegroupb.dataClasses.Symbol
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

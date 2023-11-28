@@ -1,6 +1,7 @@
-package com.example.projmobilegroupb
+package com.example.projmobilegroupb.retrofit
 
 import android.content.Context
+import com.example.projmobilegroupb.dataClasses.Asset
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -8,6 +9,7 @@ object MonitoredList {
     private const val PREFS_NAME = "MonitoredListPrefs"
     private const val KEY_ASSETS = "monitored_assets"
 
+    // lista de ações
     var assets = mutableListOf<Asset>()
         private set
 

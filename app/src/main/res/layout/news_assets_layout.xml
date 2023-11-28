@@ -4,11 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/backMonitoredAssets"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarNews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back" />
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
+
+        <TextView
+            android:id="@+id/textToolbarNews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back to monitoriztion page"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+    </androidx.appcompat.widget.Toolbar>
 
 
     <androidx.recyclerview.widget.RecyclerView

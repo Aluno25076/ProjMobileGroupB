@@ -5,22 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.example.projmobilegroupb.dataClasses.NewsItem
+import com.example.projmobilegroupb.retrofit.AssetClient
+import com.example.projmobilegroupb.retrofit.JsonNewsApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 //Declaração da classe NewsAssets que herda de Fragment
@@ -29,7 +24,7 @@ class NewsAssets: Fragment() {
     private lateinit var jsonNewsApi: JsonNewsApi
     private lateinit var recyclerViewNews: RecyclerView
     private lateinit var emptyCardView: CardView
-    private lateinit var backButton: Button
+    private lateinit var backButton: TextView
     private lateinit var emptyTextView: TextView
 
     //Método chamado ao criar ou inflar a interface do fragmento
@@ -46,7 +41,7 @@ class NewsAssets: Fragment() {
         recyclerViewNews = view.findViewById(R.id.recyclerViewNews)
         recyclerViewNews.layoutManager = LinearLayoutManager(context)
         emptyCardView = view.findViewById(R.id.withoutNews)
-        backButton = view.findViewById(R.id.backMonitoredAssets)
+        backButton = view.findViewById(R.id.textToolbarNews)
         emptyTextView = view.findViewById(R.id.textViewWithoutNews)
 
         //Evento onClick, botão back, para regressar ao MonitoredAssets, página inicial
